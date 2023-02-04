@@ -86,12 +86,13 @@ if __name__ == "__main__":
     mod = MFSKModulator(symbol_rate = 15.625, tone_spacing = 15.625, start_silence=0, base_freq=1500)
     file_length = 512 # symbols
     symbols = binary_to_octal( list(sys.argv[1]) ) 
-    symbols = (symbols  + [15]) * 8
+    symbols = (symbols  + [9,13,15])
+    symbols =  symbols * ( 75//len(symbols) )
 
     # symbols = [ 1 , 2 , 4 , 5 , 6 , 7 , 8 , 15 ] * 42  # Step 3 tones at a time.
     mod.modulate_symbol(symbols)
     mod.write_wave("input.wav")
     import os 
     os.system("play input.wav")
-    #os.system("play mfsk16_3stepped_1500.wav & python record.py")
+#os.system("play mfsk16_3stepped_1500.wav & python record.py")
 

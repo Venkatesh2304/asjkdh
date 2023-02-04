@@ -251,10 +251,12 @@ class MFSKDemodulator(object):
 def split_str(inp):
     array_of_array = []
     arr = []
-    for a in inp:
-        if a != 15 : 
+    for i in range(0,len(inp)-2) : 
+        a = inp[i]
+        if inp[i+2] != 15 and inp[i+1] != 13 and inp[i] != 9  : 
             arr.append(str(a))
         else : 
+            arr = [ j for j in arr if j not in ["9","13","15"]]
             array_of_array.append(",".join(arr))
             arr = []
     array_of_array.append(arr)
@@ -264,6 +266,9 @@ def split_str(inp):
 # Test script.
 if __name__ == "__main__":
     # filename = 'generated_MFSK16_packets.wav'
+
+    import record 
+
     filename = "output.wav"
     fs, data = wavfile.read(filename)
 
@@ -275,6 +280,7 @@ if __name__ == "__main__":
     demod = MFSKDemodulator(sample_rate = fs)
 
     root = logging.getLogger()
+    import sys 
     ch = logging.StreamHandler(sys.stdout)
     ch.setLevel(logging.ERROR)
     root.addHandler(ch)
@@ -290,7 +296,10 @@ if __name__ == "__main__":
     # process any remaning data.
     demod.consume(data[i:])
     arr = split_str( demod.bits)
+    arr = [ i for i in arr if i != ""]
+    print( arr )
     octs = max(arr,key=arr.count).split(",")
+    print( " max occ :: " , octs )
     print( octal_to_binary(octs) )
 
 
