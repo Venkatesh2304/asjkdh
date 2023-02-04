@@ -23,6 +23,7 @@ from scipy.signal import hilbert
 from ModemUtils import *
 import logging
 from oct_conv import * 
+from decoder_final import decode
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -298,10 +299,14 @@ if __name__ == "__main__":
     # print( demod.bits )
     arr = split_str( demod.bits)
     arr = [ i for i in arr if i != ""]
-    # print( arr )
-    octs = max(arr,key=arr.count).split(",")
-    # print( " max occ :: " , octs )
-    print( octal_to_binary(octs) )
+    arr = [ octal_to_binary(i.split(",")) for i in arr if type(i) == str]
+    print( arr )
+    octs = max(arr,key=arr.count)
+    print( " max occ :: " , octs )
+    res = octs
+    print("bits received from user:", res)
+    decoded = decode(res)
+    print("Decoded bits: ", decoded)
 
 
 
