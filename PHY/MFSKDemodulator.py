@@ -38,7 +38,7 @@ class MFSKDemodulator(object):
                     a symbol is detected.
 
     """
-    def __init__(self, sample_rate=8000, base_freq=1500, symbol_rate=15.625, num_tones = 16, callback = False, gray_coded = True, cheating = False):
+    def __init__(self, sample_rate=8000, base_freq=5000, symbol_rate=15.625, num_tones = 16, callback = False, gray_coded = True, cheating = False):
         self.fs = sample_rate
         self.base_freq = base_freq
         self.symbol_rate = symbol_rate
@@ -253,10 +253,10 @@ def split_str(inp):
     arr = []
     for i in range(0,len(inp)-2) : 
         a = inp[i]
-        if inp[i+2] != 15 and inp[i+1] != 13 and inp[i] != 9  : 
+        if  inp[i] != 12 and inp[i+1] != 15  : #and  inp[i+2] != 15 and inp[i+1] != 13 : 
             arr.append(str(a))
         else : 
-            arr = [ j for j in arr if j not in ["9","13","15"]]
+            arr = [ j for j in arr if j not in ["12","15"]]
             array_of_array.append(",".join(arr))
             arr = []
     array_of_array.append(arr)
@@ -295,11 +295,12 @@ if __name__ == "__main__":
 
     # process any remaning data.
     demod.consume(data[i:])
+    # print( demod.bits )
     arr = split_str( demod.bits)
     arr = [ i for i in arr if i != ""]
-    print( arr )
+    # print( arr )
     octs = max(arr,key=arr.count).split(",")
-    print( " max occ :: " , octs )
+    # print( " max occ :: " , octs )
     print( octal_to_binary(octs) )
 
 
