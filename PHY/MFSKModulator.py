@@ -90,7 +90,8 @@ if __name__ == "__main__":
 
     # symbols = [ 1 , 2 , 4 , 5 , 6 , 7 , 8 , 15 ] * 42  # Step 3 tones at a time.
     mod.modulate_symbol(symbols)
-    mod.write_wave("mfsk16_3stepped_1500.wav")
+    mod.write_wave("input.wav")
     import os 
-    os.system("play mfsk16_3stepped_1500.wav & python record.py")
+    os.system("play input.wav")
+    #os.system("play mfsk16_3stepped_1500.wav & python record.py")
 
