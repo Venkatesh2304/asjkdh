@@ -39,7 +39,7 @@ class MFSKDemodulator(object):
                     a symbol is detected.
 
     """
-    def __init__(self, sample_rate=8000, base_freq=5000, symbol_rate=15.625, num_tones = 16, callback = False, gray_coded = True, cheating = False):
+    def __init__(self, sample_rate=8000, base_freq=1000, symbol_rate=15.625, num_tones = 16, callback = False, gray_coded = True, cheating = False):
         self.fs = sample_rate
         self.base_freq = base_freq
         self.symbol_rate = symbol_rate
@@ -298,12 +298,15 @@ if __name__ == "__main__":
     demod.consume(data[i:])
     # print( demod.bits )
     arr = split_str( demod.bits)
-    arr = [ i for i in arr if i != ""]
+    arr = [ i for i in arr if i != "" and len(i) > 2 ]
+    print( arr )
     arr = [ octal_to_binary(i.split(",")) for i in arr if type(i) == str]
     print( arr )
+    #print( arr )
     octs = max(arr,key=arr.count)
-    print( " max occ :: " , octs )
+    #print(" max occ :: " , octs )
     res = octs
+    print( arr.count(octs) )
     print("bits received from user:", res)
     decoded = decode(res)
     print("Decoded bits: ", decoded)

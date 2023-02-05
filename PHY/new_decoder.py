@@ -3,7 +3,9 @@ import sys
 def decode(received_msg):
     msg_in_bits = [int(i) for i in received_msg]
     msg_len = len(msg_in_bits)
+
     error_bit = []
+
     curr_power = 1
     for i in range(1,msg_len+1):
         if i == curr_power:
@@ -23,7 +25,7 @@ def decode(received_msg):
 
     err_bit_index = msg_len - err_bit_num
     if err_bit_index != msg_len:
-        msg_in_bits[err_bit_index] = (1-msg_in_bits[err_bit_index] , "error_bit")
+        msg_in_bits[err_bit_index] = 1-msg_in_bits[err_bit_index]
 
     final_power = 1
     decode_msg = []
@@ -32,7 +34,7 @@ def decode(received_msg):
             decode_msg = [msg_in_bits[msg_len-i]] + decode_msg
         else:
             final_power = 2*final_power
-    return decode_msg 
+    return decode_msg
 
 # if __name__ == "__main__":
 #     decode(sys.argv[1])

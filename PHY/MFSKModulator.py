@@ -4,6 +4,8 @@ from scipy.io import wavfile
 from ModemUtils import *
 import sys 
 from oct_conv import * 
+from new_encoder import encode
+#import simpleaudio as sa
 
 class MFSKModulator(object):
     """ Constant Amplitude/Phase MFSK Modulator Class """
@@ -83,11 +85,18 @@ class MFSKModulator(object):
 # Test scripts
 if __name__ == "__main__":
     
-    mod = MFSKModulator(symbol_rate = 15.625, tone_spacing = 15.625, start_silence=0, base_freq=5000)
+    mod = MFSKModulator(symbol_rate = 15.625, tone_spacing = 15.625, start_silence=0, base_freq=1000)
     file_length = 512 # symbols
-    symbols = binary_to_octal( list(sys.argv[1]) ) 
+    
+    encoded = encode(sys.argv[1], int(sys.argv[2]))
+    print("Entered number: ", sys.argv[1])
+    print("Position of number that needs to be flipped: ", sys.argv[2])
+    print("Encoded number with a flipped bit: ", encoded)
+
+    encoded_str = [str(x) for x in encoded]
+    symbols = binary_to_octal(encoded_str) 
     symbols = (symbols  + [12,15])
-    symbols =  symbols * ( 150//len(symbols) )
+    symbols =  symbols * ( 300//len(symbols) )
 
     # symbols = [ 1 , 2 , 4 , 5 , 6 , 7 , 8 , 15 ] * 42  # Step 3 tones at a time.
     # print( symbols )
@@ -95,6 +104,8 @@ if __name__ == "__main__":
     mod.modulate_symbol(symbols)
     mod.write_wave("input.wav")
     import os 
-    os.system("play input.wav")
-#os.system("play mfsk16_3stepped_1500.wav & python record.py")
+    os.system("play input.wav ")
+    #wave_obj = sa.WaveObject.from_wave_file("input.wav")
+    #play_obj = wave_obj.play()
+    #play_obj.wait_done()
 
